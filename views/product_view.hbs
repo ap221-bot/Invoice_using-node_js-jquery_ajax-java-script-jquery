@@ -1,0 +1,271 @@
+<style>
+    div {
+        background-color: White;
+        width: 300px;
+        border: 1px solid black;
+        padding: 50px;
+        margin: 20px;
+    }
+
+    p1 {
+        display: block;
+        margin-block-start: 0px;
+        margin-block-end: 0px;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+    }
+</style>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $("#eventForm").submit(function(e) {
+            e.preventDefault();
+        });
+        $("#enter").submit(function(e) {
+            e.preventDefault();
+        });
+        var c=0;
+        var arr = [];
+        function total() {
+            {{#each results}}
+                arr.push({{ total }});
+            {{/each}}
+            var total = 0;
+            var i;
+            for (i = 0; i < arr.length; i++) {
+                total = arr[i] + total;
+            }
+            var tax = "10%";
+            var discount = "3%";
+            var subtotal = total;
+            total = subtotal + parseFloat(subtotal * 0.1);
+            total -= parseFloat(subtotal * 0.03);
+            $("#d1").text(subtotal);
+            $("#d2").text("3%");
+            $("#d3").text("10%");
+            $("#d4").text(parseInt(total));
+
+        }
+        /*function reset1() {
+            $("#myTable").html(" ");
+            $("#d1").text(" ");
+            $("#d2").text(" ");
+            $("#d3").text(" ");
+            $("#d4").text(" ");
+            arr = [];
+        }*/
+        
+        
+    </script>
+    <title>Invoice</title>
+</head>
+<body>
+    <form id="enter">
+        <label>Item no.</label><br>
+        <input type="number" name="item_no" id="in"><br>
+        <label>Description</label><br>
+        <input type="text" name="description" id="des"><br>
+        <label>Quantity</label><br>
+        <input type="number" name="quantity" id="q"><br>
+        <label>Unit price</label><br>
+        <input type="number" name="unit_price" id="up"><br><br>
+        <button id="entr" type="submit">Enter</button><br>
+
+    </form>
+    <form id="eventform">
+        <button id="rst" type="submit">Reset </button>
+    </form>
+    <div3 style="float:right; margin-left:100%" style="border: none !important">
+        <img style="float:right" src="https://www.bluesharklabs.com/images/logo.png">
+    </div3>
+    <div4>
+        <div5 style="float:left" style="border: none !important">
+            <input type="text" placeholder="Comapny name"></br>
+            <input type="text" placeholder="Address"></br>
+            <input type="text" placeholder="Phone"></br>
+            <input type="text" placeholder="Email"></br>
+            <input type="text" placeholder="Website"></br>
+        </div5>
+
+        <div6 style="float:right" style="border: none !important">
+            <p1>static comapny name</p1>
+            <p1>static contact name</p1>
+            <p1>static address</p1>
+            <p1>static phone</p1>
+            <p1>static name</p1>
+        </div6>
+    </div4>
+    <table style="width:100%" bordercolor="Green" border="1">
+        <tr>
+            <th>Invoice Number : 1234</th>
+            <th>Issue date : <input type="text"></th>
+            <th>Expiry Date : <input type="text"></th>
+        </tr>
+    </table></br></br>
+    <table style="width:100%" bordercolor="Green" border="1" style="empty-cells: show">
+        <thead>
+            <tr>
+                <th>Item#</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody id="myTable">
+            {{#each results}}
+            <tr>
+                <td>{{ item_no }}</td>
+                <td>{{ description }}</td>
+                <td>{{ quantity }}</td>
+                <td>{{ unit_price }}</td>
+                <td>{{ total }}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <table style="width:100%" style="empty-cells: show">
+        <tr>
+            <td>
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            </br></br><b>Additional Information</br></b>
+                            </br><div></div>
+                        </td>
+                        <td>
+                            <table bordercolor="Green" border="1" style="width:100%" id="table1">
+                                <tr id="r11">
+                                    <td class="1">Subtotal</td>
+                                    <td id="d1"></td>
+                                </tr>
+                                <tr id="r22">
+                                    <td>Discount</td>
+                                    <td id="d2"></td>
+                                </tr>
+                                <tr id="r33">
+                                    <td>Tax</td>
+                                    <td id="d3"></td>
+                                </tr>
+                            </table>
+                            </br>
+                            <table bordercolor="Green" border="1" style="width:100%" id="table2">
+                                <tr id="r44">
+                                    <td>Total &nbsp</td>
+                                    <td id="d4"></td>
+                                </tr>
+                            </table>
+                        </td>
+
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <button id="try">try</button>
+    <script>
+        $(function(){
+            $("#enter").submit(function(event){
+                event.preventDefault();
+                var item = $("#in").val();
+                var des = $("#des").val();
+                var q = $("#q").val();
+                var up = $("#up").val();
+                var z = parseInt(item);
+                var z1 = des;
+                var z2 = parseInt(q);
+                var z3 = parseInt(up);
+                var z4 = z2 * z3;
+                $.ajax({
+                    url: '/save',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    processData: false,
+                    data: JSON.stringify({ "item_no" : z, "description": z1, "quantity": z2, "unit_price": z3, "total": z4}),
+                    success: function(res){
+                            //console.log(res.response);
+                            //console.log("post");
+                            if(res.flag == 1)
+                            {
+                            $("#myTable").append($('<tr> <td>' + z + '</td> <td>' + z1 + '</td> <td>' + z2 + '</td> <td>' + z3 + '</td> <td>' + z4 + '</td></tr>'));
+                            }
+                            else
+                            {
+                                $("#myTable").html(" ");
+                                $("#d1").text(" ");
+                                $("#d2").text(" ");
+                                $("#d3").text(" ");
+                                $("#d4").text(" ");
+                                arr = [];
+                                var ii=0;
+                                for(ii=0;ii<res.response.length;ii++)
+                                {
+                                    $("#myTable").append($('<tr> <td>' + res.response[ii].item_no + '</td> <td>' + res.response[ii].description + '</td> <td>' + res.response[ii].quantity + '</td> <td>' + res.response[ii].unit_price + '</td> <td>' + res.response[ii].total + '</td></tr>'));
+                                }
+                            }
+                            $("#enter")[0].reset();
+                            arr=[];
+                            /*{{#each res.response}}
+                                arr.push({{ total }});
+                            {{/each}}*/
+                            var ii=0;
+                            for(ii=0;ii<res.response.length;ii++)
+                            {
+                                arr.push(res.response[ii].total);
+                            }
+                            //arr.push(z4);
+                            var total = 0;
+                            var i;
+                            for (i = 0; i < arr.length; i++) {
+                                total = arr[i] + total;
+                            }
+                            var tax = "10%";
+                            var discount = "3%";
+                            var subtotal = total;
+                            total = subtotal + parseFloat(subtotal * 0.1);
+                            total -= parseFloat(subtotal * 0.03);
+                            $("#d1").text(subtotal);
+                            $("#d2").text("3%");
+                            $("#d3").text("10%");
+                            $("#d4").text(parseInt(total));
+                        },
+                        error: function(data){
+                            console.log(data);
+                        }
+                    });
+                });
+            });
+    </script>
+    <script>
+        $(function(){
+            $("#eventform").submit(function(event){
+                event.preventDefault();
+                $.ajax({
+                    url: '/delete',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    processData: false,
+                    data: '',
+                    success: function(res){
+                            $("#myTable").html(" ");
+                            $("#d1").text(" ");
+                            $("#d2").text(" ");
+                            $("#d3").text(" ");
+                            $("#d4").text(" ");
+                            arr = [];
+                        },
+                        error: function(data){
+                            console.log(data);
+                        }
+                    });
+                });
+            });
+    </script>
+    <script>
+        total();
+    </script>
+</body>
+
